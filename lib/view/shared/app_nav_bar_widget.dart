@@ -52,7 +52,7 @@ class AppNavBarWidget extends StatelessWidget {
                     AppCommonHelper.pushReplacement(
                         context, AppReorderWidget());
                   },
-                  child: _NavBarItem("Re-Order", active: active == 3))
+                  child: _NavBarItem("Summary", active: active == 3))
             ],
           )
         ],

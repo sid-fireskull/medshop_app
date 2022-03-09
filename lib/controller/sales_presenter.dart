@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:medshop/entity/insertionSummaryInfo.dart';
+import 'package:medshop/entity/monthlySalesInfo.dart';
 import 'package:medshop/entity/weeklySales.dart';
 import 'package:medshop/services/sales_service.dart';
 import 'package:medshop/utils/app_common_helper.dart';
@@ -14,7 +15,7 @@ class SalesPresenter {
 
   Future<List<WeeklySales>> getWeeklySales(int productAlias) {
     //return Future.value(getDemoSummaryData());
-     return _salesService.getSalesSummary(productAlias);
+    return _salesService.getSalesSummary(productAlias);
   }
 
   Future<InsertionSummaryInfo> uploadSales() async {
@@ -26,6 +27,10 @@ class SalesPresenter {
       AppCommonHelper.customToast("No File is Selected");
       return null;
     }
+  }
+
+  Future<List<MonthlySalesInfo>> getPrevMonthSales() {
+    return _salesService.getPreviousMonthSales();
   }
 
   List<WeeklySales> getDemoSummaryData() {

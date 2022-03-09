@@ -9,7 +9,7 @@ class WeeklySales {
   int month;
   int year;
   int invoiceCount;
-  int quantity;
+  double quantity;
   String createdAt;
   String lastUpdatedAt;
 

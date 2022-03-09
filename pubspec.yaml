@@ -1,5 +1,5 @@
 name: medshop
-description: A new Flutter project.
+description: A Sales Dashboard
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -38,7 +38,7 @@ dependencies:
   pagination_view: ^2.0.0
   file_picker: ^4.3.0
   dio: ^4.0.4
-  sn_progress_dialog: ^1.0.3
+  csv: ^5.0.1
   dropdown_button2: ^1.2.1
 
 

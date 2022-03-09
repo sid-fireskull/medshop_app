@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medshop/config/theme/app-colors.dart';
 import 'package:medshop/controller/product_presenter.dart';
 import 'package:medshop/entity/productInfo.dart';
+import 'package:medshop/utils/app_common_helper.dart';
 import 'package:medshop/view/shared/app_centered_view_widget.dart';
 import 'package:medshop/view/shared/app_nav_bar_widget.dart';
 import 'package:medshop/view/shared/app_product_description_widget.dart';
@@ -24,6 +25,11 @@ class _AppProductWidgetState extends State<AppProductWidget> {
   void initState() {
     super.initState();
     _productPresenter = ProductPresenter();
+    _getData();
+  }
+
+  void _getData() {
+    _selectedIndex = -1;
     _productPresenter.getAllProducts().then((value) {
       setState(() {
         _products = value;
@@ -99,7 +105,15 @@ class _AppProductWidgetState extends State<AppProductWidget> {
                                   icon: const Icon(Icons.cloud_upload_sharp),
                                   label: const Text('Upload Product CSV'),
                                   onPressed: () {
-                                    _productPresenter.uploadProducts();
+                                    _productPresenter
+                                        .uploadProducts()
+                                        .then((value) {
+                                      if (value != null) {
+                                        _getData();
+                                        AppCommonHelper.customToast(
+                                            "Products Uploaded Successfully\nTotal Updated Records: ${value.totalUpdatedRecord}");
+                                      }
+                                    });
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(

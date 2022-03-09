@@ -11,8 +11,8 @@ class ProductInfo {
   String attr;
   String createdAt;
   String lastUpdatedAt;
-  int stockQuantity;
-  int reOrderQuantity;
+  double stockQuantity;
+  double reOrderQuantity;
 
   ProductInfo(
       {this.id,

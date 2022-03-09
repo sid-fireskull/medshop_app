@@ -14,7 +14,7 @@ WeeklySales _$WeeklySalesFromJson(Map<String, dynamic> json) {
     month: json['month'] as int,
     year: json['year'] as int,
     invoiceCount: json['invoiceCount'] as int,
-    quantity: json['quantity'] as int,
+    quantity: (json['quantity'] as num)?.toDouble(),
     createdAt: json['createdAt'] as String,
     lastUpdatedAt: json['lastUpdatedAt'] as String,
   );

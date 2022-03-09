@@ -33,7 +33,9 @@ class AppCommonHelper {
     Fluttertoast.showToast(
         msg: message ?? "",
         toastLength: Toast.LENGTH_LONG,
+        webBgColor: "linear-gradient(to right, #05adf0, #05adf0)",
         textColor: Colors.white,
+        timeInSecForIosWeb: 5,
         backgroundColor: Colors.red.shade600);
   }
 

@@ -13,6 +13,7 @@ import 'package:medshop/exceptions/privilege_exception.dart';
 import 'package:medshop/exceptions/redirection_exception.dart';
 import 'package:medshop/exceptions/server_exception.dart';
 import 'package:medshop/exceptions/validation_exception.dart';
+import 'package:medshop/utils/app_common_helper.dart';
 import '../main.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:dio/dio.dart';
@@ -62,6 +63,7 @@ class ApiClient with RouteAware {
 
   Future<http.Response> multipartFileUpload(
       String url, PlatformFile platformFile) async {
+    AppCommonHelper.customToast("Uploading Please Wait...");
     try {
       var request = http.MultipartRequest('POST', Uri.parse(baseUrl + url));
       Uint8List data = platformFile.bytes;
@@ -70,13 +72,9 @@ class ApiClient with RouteAware {
           filename: platformFile.name,
           contentType: MediaType("multipart", "form-data"));
       request.files.add(mFile);
-      request.send().then((response) {
-        http.Response.fromStream(response).then((res) {
-          print(res.statusCode);
-          print(res.reasonPhrase);
-          return _responseManager(res);
-        });
-      }).catchError(_onUnknownError);
+      var stRes = await request.send();
+      http.Response res = await http.Response.fromStream(stRes);
+      return _responseManager(res);
     } catch (e) {
       print(e);
     }
@@ -85,15 +83,17 @@ class ApiClient with RouteAware {
   // Future<http.Response> multipartFileUpload(
   //     String url, PlatformFile platformFile) async {
   //   var formData = FormData.fromMap({
-  //     'file': await MultipartFile.fromBytes(platformFile.bytes,
+  //     'file': MultipartFile.fromBytes(platformFile.bytes,
   //         filename: platformFile.name),
   //   });
   //   Dio dio = Dio(BaseOptions(baseUrl: baseUrl));
   //   dio.post(url, data: formData).then((val) {
   //     print(val.data);
   //     print(val.statusMessage);
+  //     Response rs = Response(requestOptions: val.requestOptions);
+  //     return rs;
   //   });
-  // }
+  //}
 
   Future<http.Response> postRequest(String url, String content) async {
     await getHeader();

@@ -2,12 +2,14 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:medshop/entity/insertionSummaryInfo.dart';
+import 'package:medshop/entity/monthlySalesInfo.dart';
 import 'package:medshop/entity/weeklySales.dart';
 import 'package:medshop/utils/api_client.dart';
 
 class SalesService extends ApiClient {
   final String _uploadSalesUrl = "/sales";
   final String _salesSummaryUrl = "/sales/summary";
+  final String _prevMonthSalesUrl = "/sales/previousMonth";
 
   SalesService();
 
@@ -29,6 +31,22 @@ class SalesService extends ApiClient {
         if (result != null) {
           Iterable iterable = result;
           return iterable.map((e) => WeeklySales.fromJson(e)).toList();
+        } else {
+          return [];
+        }
+      } else {
+        return [];
+      }
+    });
+  }
+
+  Future<List<MonthlySalesInfo>> getPreviousMonthSales() {
+    return getRequest(_prevMonthSalesUrl, "").then((response) {
+      if (response != null) {
+        var result = json.decode(response.body);
+        if (result != null) {
+          Iterable iterable = result;
+          return iterable.map((e) => MonthlySalesInfo.fromJson(e)).toList();
         } else {
           return [];
         }

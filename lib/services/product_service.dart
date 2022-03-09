@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 import 'package:medshop/entity/insertionSummaryInfo.dart';
 import 'package:medshop/entity/productInfo.dart';
+import 'package:medshop/entity/stockInfo.dart';
 import 'package:medshop/utils/api_client.dart';
 
 class ProductService extends ApiClient {
   final String _allProductsUrl = "/products";
   final String _uploadProductsUrl = "/product";
+  final String _uploadStockUrl = "/stock";
 
   ProductService();
 
@@ -35,6 +37,17 @@ class ProductService extends ApiClient {
         return InsertionSummaryInfo.fromJson(result);
       } else {
         return null;
+      }
+    });
+  }
+
+  Future<List<StockInfo>> uploadStocks(PlatformFile platformFile) {
+    return multipartFileUpload(_uploadStockUrl, platformFile).then((response) {
+      if (response != null && response.statusCode == 200) {
+        Iterable iterable = json.decode(response.body);
+        return iterable.map((e) => StockInfo.fromJson(e)).toList();
+      } else {
+        return [];
       }
     });
   }

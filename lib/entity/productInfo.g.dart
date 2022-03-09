@@ -14,8 +14,8 @@ ProductInfo _$ProductInfoFromJson(Map<String, dynamic> json) {
     marketingGroup: json['marketingGroup'] as String,
     vendor: json['vendor'] as String,
     attr: json['attr'] as String,
-    stockQuantity: json['stockQuantity'] as int,
-    reOrderQuantity: json['reOrderQuantity'] as int,
+    stockQuantity: (json['stockQuantity'] as num)?.toDouble(),
+    reOrderQuantity: (json['reOrderQuantity'] as num)?.toDouble(),
     createdAt: json['createdAt'] as String,
     lastUpdatedAt: json['lastUpdatedAt'] as String,
   );

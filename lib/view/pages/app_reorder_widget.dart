@@ -76,9 +76,9 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
     for (int i = 0; i < _products?.length; i++) {
       ProductInfo prod = _products[i];
       _products[i].reOrderQuantity =
-          int.tryParse(_reOrderMapper[prod.productAlias] ?? "0");
+          double.tryParse(_reOrderMapper[prod.productAlias] ?? "0");
       _products[i].stockQuantity =
-          int.tryParse(_stockMapper[prod.productAlias] ?? "0");
+          double.tryParse(_stockMapper[prod.productAlias] ?? "0");
     }
 
     if (value == DROPDOWN_REORDER) {
@@ -147,7 +147,20 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
                                           MaterialStateProperty.all(
                                               AppColors.secondaryColor),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _productPresenter
+                                          .uploadStocks()
+                                          .then((value) {
+                                        if (value != null &&
+                                            value?.length > 0) {
+                                          setState(() {
+                                            _stockMapper = value;
+                                          });
+                                          AppCommonHelper.customToast(
+                                              "Stocks Updated");
+                                        }
+                                      });
+                                    },
                                     child: "Upload Stocks".text.white.make()),
                                 const SizedBox(
                                   width: 6,
@@ -476,7 +489,7 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
           AppCommonHelper.formatDate(key.toString(), dateFormat: "MMMM yy");
       cells[0] = month;
       for (int counter = 0; counter < value.length; counter++) {
-        int qty = value[counter].quantity;
+        double qty = value[counter].quantity;
         switch (value[counter].week) {
           case 0:
             cells[2] = qty;
