@@ -14,7 +14,7 @@ class AppSectionDescriptionWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          title.text.size(70).bold.black.make(),
+          title.text.size(40).bold.black.make(),
           const SizedBox(
             height: 20,
           ),
