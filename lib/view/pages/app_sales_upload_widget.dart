@@ -46,6 +46,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
     _salesPresenter.getPrevMonthSales().then((value) {
       setState(() {
         _prevMonthSales = value;
+        _prevMonthSales.sort((a, b) => a.quantity.compareTo(b.quantity));
         if (_prevMonthSales.isNotEmpty && _prevMonthSales.length < 4) {
           len = _prevMonthSales.length;
         } else if (_prevMonthSales.isEmpty) {
@@ -82,7 +83,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                               Container(
                                 margin: const EdgeInsets.only(top: 100),
                                 padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 child: "Top Performing Products"
                                     .text
                                     .bold
@@ -96,7 +97,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           mainAxisSpacing: 8,
                                           crossAxisSpacing: 8,
-                                          mainAxisExtent: 120,
+                                          mainAxisExtent: 130,
                                           crossAxisCount: 2),
                                   itemBuilder: (context, index) {
                                     MonthlySalesInfo sale =
@@ -117,13 +118,12 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                               .selectableText
                                               .black
                                               .bold
-                                              .size(16)
+                                              .size(14)
                                               .make(),
                                           "Product Alias: ${sale.productAlias}"
                                               .selectableText
-                                              .gray600
-                                              .bold
-                                              .size(15)
+                                              .gray500
+                                              .size(14)
                                               .make(),
                                           Expanded(child: Container()),
                                           Align(
@@ -133,7 +133,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                                 .text
                                                 .size(30)
                                                 .bold
-                                                .color(Colors.grey.shade300)
+                                                .color(Colors.grey.shade400)
                                                 .make(),
                                           )
                                         ],
