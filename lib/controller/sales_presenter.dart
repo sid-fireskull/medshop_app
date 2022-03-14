@@ -1,10 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:medshop/entity/insertionSummaryInfo.dart';
 import 'package:medshop/entity/monthlySalesInfo.dart';
+import 'package:medshop/entity/productInfo.dart';
+import 'package:medshop/entity/stockInfo.dart';
 import 'package:medshop/entity/weeklySales.dart';
 import 'package:medshop/services/sales_service.dart';
 import 'package:medshop/utils/app_common_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:html' as webFile;
 
 class SalesPresenter {
   SalesService _salesService;
@@ -39,5 +46,43 @@ class SalesPresenter {
     var data = json.decode(txt);
     Iterable iterable = data;
     return iterable.map((e) => WeeklySales.fromJson(e)).toList();
+  }
+
+  void generateCSVLocally(List<ProductInfo> productList) async {
+    String fileName =
+        "reorder_${AppCommonHelper.formatDate(DateTime.now().toString())}.csv";
+    List<List<dynamic>> rows = [[]];
+    for (int i = 0; i < productList.length; i++) {
+      List<dynamic> singleRow = [];
+      singleRow.add(productList[i].productAlias);
+      singleRow.add(productList[i].productName);
+      singleRow.add(productList[i].marketingGroup);
+      singleRow.add(productList[i].stockQuantity);
+      singleRow.add(productList[i].reOrderQuantity);
+      singleRow.add(productList[i].vendor);
+      rows.add(singleRow);
+      //   print(rows);
+    }
+
+    List<dynamic> headers = [
+      "ProductAlias",
+      "Products",
+      "Marketing Group",
+      "Stock Quantity",
+      "Re-order Quantity",
+      "Vendor"
+    ];
+    rows.insert(0, headers);
+    String csv = const ListToCsvConverter().convert(rows);
+
+    if (kIsWeb) {
+      var blob = webFile.Blob([csv], 'text/plain', 'native');
+
+      webFile.AnchorElement(
+        href: webFile.Url.createObjectUrlFromBlob(blob).toString(),
+      )
+        ..setAttribute("download", fileName)
+        ..click();
+    }
   }
 }

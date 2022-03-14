@@ -4,6 +4,7 @@ import 'package:medshop/controller/product_presenter.dart';
 import 'package:medshop/entity/productInfo.dart';
 import 'package:medshop/utils/app_common_helper.dart';
 import 'package:medshop/view/shared/app_centered_view_widget.dart';
+import 'package:medshop/view/shared/app_edit_product_dialog.dart';
 import 'package:medshop/view/shared/app_nav_bar_widget.dart';
 import 'package:medshop/view/shared/app_product_description_widget.dart';
 import 'package:medshop/view/shared/app_product_list_widget.dart';
@@ -88,6 +89,11 @@ class _AppProductWidgetState extends State<AppProductWidget> {
                                   )
                                 : AppProductDescription(
                                     product: _products[_selectedIndex],
+                                    func: (val) {
+                                      if (val) {
+                                        _getData();
+                                      }
+                                    },
                                   ),
                           ),
                           Container(
@@ -123,7 +129,18 @@ class _AppProductWidgetState extends State<AppProductWidget> {
                                 ElevatedButton.icon(
                                   icon: const Icon(Icons.add),
                                   label: const Text('Add Product'),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AppEditProductDialog(
+                                              ProductInfo(), (val) {
+                                            if (val) {
+                                              _getData();
+                                            }
+                                          });
+                                        });
+                                  },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(
                                         AppColors.secondaryColor),

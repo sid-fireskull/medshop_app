@@ -46,4 +46,12 @@ class ProductPresenter {
       return null;
     }
   }
+
+  Future<bool> saveProduct(ProductInfo prod) {
+    if (prod.id == null || prod.id <= 0) {
+      return productService.addProduct(prod);
+    } else {
+      return productService.updateProduct(prod);
+    }
+  }
 }

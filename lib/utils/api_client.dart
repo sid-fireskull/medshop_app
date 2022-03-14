@@ -127,7 +127,7 @@ class ApiClient with RouteAware {
     Map<String, String> extraHeaders = Map.from(_headers);
     extraHeaders["X-HTTP-Method-Override"] = "PUT";
     return http
-        .post(Uri.parse(baseUrl + url), body: content, headers: extraHeaders)
+        .put(Uri.parse(baseUrl + url), body: content, headers: extraHeaders)
         .then(
       (response) {
         return _responseManager(response);

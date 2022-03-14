@@ -166,7 +166,9 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
                                   width: 6,
                                 ),
                                 ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _generateCSV();
+                                    },
                                     child: "Export".text.white.make())
                               ],
                             ),
@@ -331,6 +333,7 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
   }
 
   Widget _buildProductInformationWidget(ProductInfo prod) {
+    bool isEdited = _reOrderMapper.containsKey(prod.productAlias);
     return InkWell(
       onTap: () {
         setState(() {
@@ -352,30 +355,37 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
             Expanded(
                 flex: 1,
                 child: _buildTextWidget(
-                    "Product Name", prod.productName, prod.productAlias)),
+                    "Product Name", prod.productName, prod.productAlias,
+                    isEdited: isEdited)),
             Expanded(
                 flex: 1,
                 child: _buildTextWidget("Product Alias",
-                    prod.productAlias.toString(), prod.productAlias)),
+                    prod.productAlias.toString(), prod.productAlias,
+                    isEdited: isEdited)),
             Expanded(
                 flex: 1,
                 child: _buildTextWidget("Stock Quantity",
-                    _stockMapper[prod.productAlias] ?? "0", prod.productAlias)),
+                    _stockMapper[prod.productAlias] ?? "0", prod.productAlias,
+                    isEdited: isEdited)),
             Expanded(
                 flex: 1,
                 child: _buidEditTextWidget("Re-Order Quantity",
-                    _reOrderMapper[prod.productAlias], prod.productAlias)),
+                    _reOrderMapper[prod.productAlias], prod.productAlias,
+                    isEdited: isEdited)),
             Expanded(
                 flex: 1,
                 child: _buildTextWidget(
-                    "Marketing Group", prod.marketingGroup, prod.productAlias)),
+                    "Marketing Group", prod.marketingGroup, prod.productAlias,
+                    isEdited: isEdited)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTextWidget(String label, String value, int productAlias) {
+  Widget _buildTextWidget(String label, String value, int productAlias,
+      {bool isEdited}) {
+    isEdited ??= false;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -384,7 +394,10 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
           style: TextStyle(
               color: _selectedProduct?.productAlias == productAlias
                   ? Colors.white70
-                  : Colors.grey,
+                  : isEdited
+                      ? Colors.black
+                      : Colors.grey,
+              fontWeight: isEdited ? FontWeight.bold : FontWeight.normal,
               fontSize: 11),
         ),
         Text(
@@ -395,13 +408,16 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
               color: _selectedProduct?.productAlias == productAlias
                   ? Colors.white
                   : Colors.black,
+              fontWeight: isEdited ? FontWeight.bold : FontWeight.normal,
               fontSize: 12),
         )
       ],
     );
   }
 
-  Widget _buidEditTextWidget(String label, String value, int productAlias) {
+  Widget _buidEditTextWidget(String label, String value, int productAlias,
+      {bool isEdited}) {
+    isEdited ??= false;
     TextEditingController _txtController =
         TextEditingController(text: value ?? "0");
     return Column(
@@ -412,7 +428,10 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
           style: TextStyle(
               color: _selectedProduct?.productAlias == productAlias
                   ? Colors.white70
-                  : Colors.grey,
+                  : isEdited
+                      ? Colors.black
+                      : Colors.grey,
+              fontWeight: isEdited ? FontWeight.bold : FontWeight.normal,
               fontSize: 11),
         ),
         const SizedBox(
@@ -426,10 +445,12 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
               _reOrderMapper[productAlias] = value;
             },
             style: const TextStyle(fontSize: 12),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*')),
+            ],
             keyboardType: const TextInputType.numberWithOptions(
-              signed: false,
-            ),
+                signed: false, decimal: false),
+
             decoration: const InputDecoration(
                 contentPadding: EdgeInsets.all(6),
                 border: OutlineInputBorder(),
@@ -573,5 +594,15 @@ class _AppReorderWidgetState extends State<AppReorderWidget> {
     } else {
       AppCommonHelper.customToast("Less than three letters are not allowed");
     }
+  }
+
+  void _generateCSV() {
+    for (int i = 0; i < _products.length; i++) {
+      _products[i].stockQuantity =
+          double.parse(_stockMapper[_products[i].productAlias] ?? "0");
+      _products[i].reOrderQuantity =
+          double.parse(_reOrderMapper[_products[i].productAlias] ?? "0");
+    }
+    _salesPresenter.generateCSVLocally(_products);
   }
 }
