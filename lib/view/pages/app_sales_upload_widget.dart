@@ -91,6 +91,9 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                     .black
                                     .make(),
                               ),
+                              const SizedBox(
+                                height: 30,
+                              ),
                               Expanded(
                                 child: GridView.builder(
                                   gridDelegate:
@@ -122,7 +125,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                               .make(),
                                           "Product Alias: ${sale.productAlias}"
                                               .selectableText
-                                              .gray500
+                                              .color(Colors.grey.shade500)
                                               .size(14)
                                               .make(),
                                           Expanded(child: Container()),
@@ -133,7 +136,7 @@ class _AppSalesUploadWidgetState extends State<AppSalesUploadWidget> {
                                                 .text
                                                 .size(30)
                                                 .bold
-                                                .color(Colors.grey.shade400)
+                                                .color(Colors.blueGrey.shade500)
                                                 .make(),
                                           )
                                         ],
