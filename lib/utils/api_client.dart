@@ -156,7 +156,11 @@ class ApiClient with RouteAware {
     } else if (response.statusCode == 430) {
       throw RedirectionException(response.body);
     } else if (response.statusCode == 401) {
-      Fluttertoast.showToast(msg: response.body);
+      // Fluttertoast.showToast(msg: response.body);
+      Fluttertoast.showToast(msg: "Un-Authorized",
+                    toastLength: Toast.LENGTH_LONG,
+                    backgroundColor: Colors.red.shade700,
+                    textColor: Colors.white);
       throw PrivilegeException(response.body);
     } else {
       Fluttertoast.showToast(msg: response.body);
